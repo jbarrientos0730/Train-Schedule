@@ -20,10 +20,22 @@ $("#add-train-btn").on("click", function(event) {
     trainName = $("#train-name-input").val().trim();
     destination = $("#destination-input").val().trim();
     frequency = $("#frequency-input").val().trim();
-
-    database.ref()push({
+    
+    database.ref().push({
         trainName: trainName,
         destination: destination,
         frequency: frequency
     });
+});
+
+database.ref().on("value", function(snapshot) {
+
+    // Print the initial data to the console.
+    console.log(snapshot.val());
+
+    // Log the value of the various properties
+    console.log(snapshot.val().trainName);
+    console.log(snapshot.val().destination);
+    console.log(snapshot.val().frequency);
+
 });
