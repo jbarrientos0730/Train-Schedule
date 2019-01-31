@@ -38,11 +38,35 @@ $(document).on("click", "#add-train-btn", function(event) {
         frequency: frequency
     });
 
+    alert("Train Successfully Added");
+
+    $("#train-name-input").val("");
+    $("#destination-input").val("");
+    $("#frequency-input").val("");
+    
 });
 
+database.ref().on("child_added", function(childsnapshot) {
+    console.log(childsnapshot.val());
 
-// var currentTime = moment().format("hh:mm:ss a");
-// console.log(currentTime);
+    var trainName = childsnapshot.val().trainName;
+    var destination = childsnapshot.val().destination;
+    var frequency = childsnapshot.val().frequency;
 
-// var arrivalTime = currentTime.add(frequency,"minutes");
-// console.log(arrivalTime);
+    var nextArrival = moment().add(frequency, "minutes");
+    console.log(nextArrival)
+
+    var timeLeft = moment().diff(moment(nextArrival, "X"), "minutes");
+    console.log(timeLeft);
+
+    var newRow = $("<tr>").append(
+        $("<td>").text(trainName),
+        $("<td>").text(destination),
+        $("<td>").text(frequency),
+        $("<td>").text(nextArrival),
+        $("<td>").text(timeLeft)
+    );
+
+    $("#train-table > tbody").append(newRow)
+
+});
